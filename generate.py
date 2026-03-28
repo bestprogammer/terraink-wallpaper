@@ -1,6 +1,7 @@
 """
 generate.py — Terraink Wallpaper Generator
 Optimiert für iPhone 13 (2532x1170px, 460ppi)
+Nutzt Adresstext statt Koordinaten — terraink_py löst via Nominatim auf
 """
 import argparse
 from pathlib import Path
@@ -27,10 +28,8 @@ THEMES = [
 
 def main():
     parser = argparse.ArgumentParser(description="Terraink Wallpaper Generator")
-    parser.add_argument("--lat",         type=float, required=True)
-    parser.add_argument("--lon",         type=float, required=True)
-    parser.add_argument("--city",        type=str,   default="My Location")
-    parser.add_argument("--theme",       type=str,   default="midnight_blue", choices=THEMES)
+    parser.add_argument("--location",    type=str,   required=True,            help="Adresse oder Stadtname")
+    parser.add_argument("--theme",       type=str,   default="midnight_blue",  choices=THEMES)
     parser.add_argument("--distance",    type=int,   default=3000)
     parser.add_argument("--list-themes", action="store_true")
     args = parser.parse_args()
@@ -43,15 +42,14 @@ def main():
 
     Path("output").mkdir(exist_ok=True)
 
-    print(f"Generiere: {args.city} ({args.lat}, {args.lon}) | Theme: {args.theme} | Radius: {args.distance}m")
+    print(f"Generiere: {args.location} | Theme: {args.theme} | Radius: {args.distance}m")
 
     result = generate_poster(
         PosterRequest(
             output=Path("output/wallpaper"),
             formats=("png",),
-            lat=args.lat,
-            lon=args.lon,
-            title=args.city,
+            location=args.location,
+            title=args.location.split(",")[1].strip() if "," in args.location else args.location,
             subtitle="",
             theme=args.theme,
             width_cm=9.91,   # iPhone 13: 2532x1170px @ 460ppi
