@@ -34,20 +34,15 @@ on:
         required: false
         default: '3000'
         type: string
-      screen_width:
-        description: 'Bildschirmbreite in Punkten'
+      width_px:
+        description: 'Bildbreite in Pixel (iPhone 13: 1170)'
         required: false
-        default: '390'
+        default: '1170'
         type: string
-      screen_height:
-        description: 'Bildschirmhöhe in Punkten'
+      height_px:
+        description: 'Bildhöhe in Pixel (iPhone 13: 2532)'
         required: false
-        default: '844'
-        type: string
-      scale:
-        description: 'Scale Factor (2 oder 3)'
-        required: false
-        default: '3'
+        default: '2532'
         type: string
 
 jobs:
@@ -71,9 +66,8 @@ jobs:
             --location "${{ github.event.inputs.location }}" \
             --theme "${{ github.event.inputs.theme || 'midnight_blue' }}" \
             --distance "${{ github.event.inputs.distance || '3000' }}" \
-            --screen-width "${{ github.event.inputs.screen_width || '390' }}" \
-            --screen-height "${{ github.event.inputs.screen_height || '844' }}" \
-            --scale "${{ github.event.inputs.scale || '3' }}"
+            --width-px "${{ github.event.inputs.width_px || '1170' }}" \
+            --height-px "${{ github.event.inputs.height_px || '2532' }}"
 
       - name: Bild in Repo committen
         run: |
